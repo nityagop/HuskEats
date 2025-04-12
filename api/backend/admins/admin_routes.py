@@ -95,7 +95,7 @@ def update_restaurantApproval():
     cursor = db.get_db().cursor()
     r = cursor.execute(query, data)
     db.get_db().commit()
-    return 'customer updated!'
+    return 'restaurant updated!'
 #------------------------------------------------------------
 # Get total ad revenue from the system
 @admins.route('/adRevenue', methods=['GET'])
@@ -103,7 +103,7 @@ def get_adRevenue():
 
     cursor = db.get_db().cursor()
     the_query = '''
-    SELECT COUNT(*) AS 'Number of Advertisements', SUM(a.total_cost) 'Total Ad Revenue'
+    SELECT COUNT(*) AS 'Number of Advertisements', SUM(a.total_cost) 'Total Ad Revenue', SUM(a.total_cost)/COUNT(*) 'Average Revenue of Ad'
     FROM Advertisement a
     '''
     cursor.execute(the_query)
@@ -114,6 +114,59 @@ def get_adRevenue():
     the_response.status_code = 200
     return the_response
 
+#------------------------------------------------------------
+# Get ad revenue of an advertisement from the system
+@admins.route('/advertisementsByAdvertiser', methods=['GET'])
+def get_adsByAdvertisers():
+    cursor = db.get_db().cursor()
+    the_query = '''
+    SELECT SUM(total_cost) AS 'Ad Revenue by Advertiser', advertiser_id AS 'Advertiser ID'
+    FROM Advertisement
+    GROUP BY advertiser_id
+    '''
+    cursor.execute(the_query)
+    
+    theData = cursor.fetchall()
+    
+    the_response = make_response(jsonify(theData))
+    the_response.status_code = 200
+    return the_response
+
+#------------------------------------------------------------
+# Get ad revenue of an advertisement from the system
+@admins.route('/advertisements', methods=['GET'])
+def get_ads():
+    cursor = db.get_db().cursor()
+    the_query = '''
+    SELECT advertisement_id AS 'Ad ID', advertiser_id AS 'Advertiser ID', total_cost AS 'Ad Cost'
+    FROM Advertisement
+    '''
+    cursor.execute(the_query)
+    
+    theData = cursor.fetchall()
+    
+    the_response = make_response(jsonify(theData))
+    the_response.status_code = 200
+    return the_response
+    
+#------------------------------------------------------------
+# Get list of unapproved restaurants from the system
+@admins.route('/restaurants', methods=['GET'])
+def get_restaurants():
+
+    cursor = db.get_db().cursor()
+    the_query = '''
+    SELECT *
+    FROM Restaurant_Profile
+    WHERE approval_status = 0
+    '''
+    cursor.execute(the_query)
+    
+    theData = cursor.fetchall()
+    
+    the_response = make_response(jsonify(theData))
+    the_response.status_code = 200
+    return the_response
 
 
 
