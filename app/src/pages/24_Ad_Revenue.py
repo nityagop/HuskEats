@@ -3,7 +3,6 @@ logger = logging.getLogger(__name__)
 
 import streamlit as st
 import pandas as pd
-import altair as alt
 from modules.nav import SideBarLinks
 import requests
 
@@ -34,7 +33,7 @@ try:
     st.write('##### Chart of Ad Revenue by Advertiser')
     st.bar_chart(
     adsByAdvertiser,
-    x="Advertiser ID",
+    x="Advertiser Name",
     color=["#C8A2C8"],
     y="Ad Revenue by Advertiser",
     use_container_width=True,

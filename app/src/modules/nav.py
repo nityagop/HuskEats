@@ -10,10 +10,6 @@ def HomeNav():
     st.sidebar.page_link("Home.py", label="Home", icon="🏠")
 
 
-def AboutPageNav():
-    st.sidebar.page_link("pages/30_About.py", label="About", icon="🧠")
-
-
 #### ------------------------ Examples for Role of pol_strat_advisor ------------------------
 def PolStratAdvHomeNav():
     st.sidebar.page_link(
@@ -52,18 +48,41 @@ def ClassificationNav():
 def AdminPageNav():
     st.sidebar.page_link("pages/20_Admin_Home.py", label="System Admin", icon="🖥️")
 
+
 def UserStatsNav():
     st.sidebar.page_link("pages/22_User_Stats.py", label="User Statistics", icon="📊")
+
 
 def RestaurantApprovalNav():
     st.sidebar.page_link(
         "pages/23_Restaurant_Approval.py", label="Restaurant Approval", icon="🍔"
     )
 
+
 def AdRevenueNav():
+    st.sidebar.page_link("pages/24_Ad_Revenue.py", label="Ad Revenue", icon="💰")
+
+
+#### -------------------- Advertiser Role ------------------
+
+
+def AdvertiserPageNav():
     st.sidebar.page_link(
-        "pages/24_Ad_Revenue.py", label="Ad Revenue", icon="💰"
+        "pages/30_Advertiser_Home.py", label="Advertiser Home", icon="💲"
     )
+
+
+def UploadAdPageNav():
+    st.sidebar.page_link("pages/31_Upload_Ads.py", label="Upload Ads", icon="🔼")
+
+
+def ManageAdPageNav():
+    st.sidebar.page_link("pages/32_Manage_Ads.py", label="Manage Ads", icon="➕")
+
+
+def EditAdPageNav():
+    st.sidebar.page_link("pages/33_Edit_Ads.py", label="Edit Ads", icon="✏️")
+
 
 # --------------------------------Links Function -----------------------------------------------
 def SideBarLinks(show_home=False):
@@ -92,11 +111,12 @@ def SideBarLinks(show_home=False):
             WorldBankVizNav()
             MapDemoNav()
 
-        # If the user role is usaid worker, show the Api Testing page
-        if st.session_state["role"] == "usaid_worker":
-            PredictionNav()
-            ApiTestNav()
-            ClassificationNav()
+        # If the user role is advertiser, show advertiser pages
+        if st.session_state["role"] == "advertiser":
+            AdvertiserPageNav()
+            UploadAdPageNav()
+            ManageAdPageNav()
+            EditAdPageNav()
 
         # If the user is an administrator, give them access to the administrator pages
         if st.session_state["role"] == "administrator":
@@ -104,9 +124,6 @@ def SideBarLinks(show_home=False):
             UserStatsNav()
             RestaurantApprovalNav()
             AdRevenueNav()
-
-    # Always show the About page at the bottom of the list of links
-    AboutPageNav()
 
     if st.session_state["authenticated"]:
         # Always show a logout button if there is a logged in user
