@@ -65,9 +65,6 @@ def add_reply():
     the_response.status_code = 200
     return the_response
 
-# update reply? 
-
-# delete reply? 
 
 # create restaurant profile 
 @restaurant_owners.route('/restaurant_owners/profile', methods=['POST'])
@@ -112,4 +109,3 @@ def update_profile():
     db.get_db().commit()
     return 'profile updated!'
 
-# delete restaurant profile
