@@ -16,7 +16,7 @@ st.header("Restaurant Profile")
 # You can access the session state to make a more customized/personalized app experience
 #st.write(f"### Welcome to your profile, {st.session_state['first_name']}!")
 
-restaurant_id = 2345
+restaurant_id = 1
 if restaurant_id:
     url = f"http://api:4000/r/restaurant_owners/profile/{restaurant_id}"
     response = requests.get(url)
