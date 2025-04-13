@@ -18,15 +18,14 @@ students = Blueprint('students', __name__)
 
 #------------------------------------------------------------
 
-# get all restaurants with reviews over 4 starts
+# get all restaurants
 @students.route('/top-rest', methods=['GET'])
 def get_topRestaurants():
     cursor = db.get_db().cursor()
     cursor.execute('''
-    select rp.name as 'top resturants' 
+    select rp.name as 'resturants' 
     from Restaurant_Profile rp join Review r on rp.restaurant_id = r.restaurant_id
     GROUP BY rp.restaurant_id, rp.name
-    HAVING avg(r.rating) >= 4
     order by avg(r.rating) desc;
     ''')
     
@@ -70,7 +69,7 @@ def get_userFavorites(user_id):
     where u.user_id = %s
     '''
 
-    cursor.execute(query, (user_id,))
+    cursor.execute(query, (user_id))
     theData = cursor.fetchall()
     
     the_response = make_response(jsonify(theData))
