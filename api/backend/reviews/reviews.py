@@ -56,3 +56,38 @@ def get_resteraunt_reviews(resteraunt_id):
     response = make_response(theData)
     response.status_code = 200
     return response
+
+#------------------------------------------------------------
+# Create a new Review
+@reviews.route("/reviews/{resteraunt_id}", methods=["POST"])
+def post_review():
+    current_app.logger.info("POST /review route")
+    reviews_info = request.json
+    user_id = reviews_info["user_id"]
+    resteraunt_id = reviews_info["resteraunt_id"]
+    title = reviews_info["title"]
+    rating = reviews_info["rating"]
+    content = reviews_info["content"]
+    image = reviews_info["image"]
+    date_reported = reviews_info["date_reported"]
+    review_id = reviews_info["review_id"]
+
+    query = """INSERT INTO Review (user_id, resteraunt_id, title, rating, content, image, date_reported,review_id)
+                   VALUES (%s, %s, %s, %s, %s, %s, %s,%s)
+    """
+    data = (
+        user_id,
+        resteraunt_id,
+        title,
+        rating,
+        content,
+        image,
+        date_reported,
+        review_id
+    )
+    cursor = db.get_db().cursor()
+    cursor.execute(query, data)
+
+    response = make_response(jsonify("created review at {review_id}"))
+    response.status_code = 200
+    return response
