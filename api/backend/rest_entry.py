@@ -5,6 +5,7 @@ from backend.admins.admin_routes import admins
 from backend.customers.customer_routes import customers
 from backend.products.products_routes import products
 from backend.simple.simple_routes import simple_routes
+from backend.students.students import students
 from backend.advertisers.advertiser_routes import advertiser
 from backend.restaurant_owners.restaurant_owners import restaurant_owners
 
@@ -47,9 +48,10 @@ def create_app():
     # and give a url prefix to each
     app.logger.info("current_app(): registering blueprints with Flask app object.")
     app.register_blueprint(simple_routes)
-    app.register_blueprint(customers, url_prefix="/c")
-    app.register_blueprint(products, url_prefix="/p")
-    app.register_blueprint(admins, url_prefix="/a")
+    app.register_blueprint(customers,   url_prefix='/c')
+    app.register_blueprint(products,    url_prefix='/p')
+    app.register_blueprint(admins,      url_prefix='/a')
+    app.register_blueprint(students,      url_prefix='/s')
     app.register_blueprint(advertiser, url_prefix="/ad")
     app.register_blueprint(restaurant_owners,    url_prefix='/r')
 
