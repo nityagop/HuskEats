@@ -59,6 +59,24 @@ def get_restReviews(resturaunt_id):
 
 #------------------------------------------------------------
 
+# get favorites list of a student
+@students.route('/favorites/<user_id>', methods=['GET'])
+def get_userFavorites(user_id):
+
+    cursor = db.get_db().cursor()
+    query = '''
+    select rp.name from Restaurant_Profile rp join User_Favorites uf on rp.restaurant_id = uf.restaurant_id
+    join User u on uf.user_id = u.user_id
+    where u.user_id = %s
+    '''
+
+    cursor.execute(query, (user_id,))
+    theData = cursor.fetchall()
+    
+    the_response = make_response(jsonify(theData))
+    the_response.status_code = 200
+    return the_response
+
 #------------------------------------------------------------
 # Create a new Review
 @students.route('/reviews/<user_id>/<resturaunt_id>', methods=["POST"])
