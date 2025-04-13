@@ -142,13 +142,16 @@ CREATE TABLE Reported_Reviews (
 
 INSERT INTO User(user_id, first_name, last_name, email, last_use_date, active_status)
 VALUES
-    (10017054, 'Alice', 'Johnson', 'alice@example.com', '2024-03-10', 1),
+    (10017054, 'Alice', 'Johnson', 'alice@example.com', '2025-04-10', 1),
     (10017828, 'Bob', 'Smith', 'bob@example.com', '2024-03-15', 1),
     (10014563, 'Charlie', 'Brown', 'charlie@example.com', '2024-03-12', 0);
 
 
 INSERT INTO Restaurant_Profile(restaurant_id, name, address, image, description, promotional_image, menu_image, hours, approval_status)
 VALUES
+(1, 'El Jefes Taqueria', '269 Huntington Ave', NULL, 'Best mexican food', NULL, NULL, '9:00:00', 0),
+(2, 'Mamacitas', '329 Huntington Ave', NULL, 'Yummy mexican food', NULL, NULL, '8:00:00', 0),
+(3, 'Kung Foo Tea', '334 Massachusetts Ave', NULL, 'Amazing Boba', NULL, NULL, '11:00:00', 0),
 (2345, 'Pasta Palace', '123 Main St', NULL, 'Italian Cuisine', NULL, NULL, '10:00:00', 1),
 (5677, 'Burger Haven', '456 Elm St', NULL, 'Best burgers in town', NULL, NULL, '11:00:00', 1),
 (8894, 'Sushi Spot', '789 Pine St', NULL, 'Authentic Japanese Sushi', NULL, NULL, '09:30:00', 1);

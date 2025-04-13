@@ -2,6 +2,7 @@
 # Sample customers blueprint of endpoints
 # Remove this file if you are not using it in your project
 ########################################################
+import datetime
 from flask import Blueprint
 from flask import request
 from flask import jsonify
@@ -72,25 +73,21 @@ def get_activeUsers():
 
 #------------------------------------------------------------
 # Update a restaurant's approval status
-@admins.route('/restaurant/<restaurant_id>', methods=['PUT'])
-def update_restaurantApproval():
-    current_app.logger.info('PUT /admins route')
-    restaurant_info = request.json
-    restaurant_id = restaurant_info['restaurant_id']
-    name = restaurant_info['name']
-    address = restaurant_info['address']
-    image = restaurant_info['image']
-    description = restaurant_info['description']
-    promotional_image = restaurant_info['promotional_image']
-    menu_image = restaurant_info['menu_image']
-    hours = restaurant_info['hours']
-    approval_status = restaurant_info['approval_status']
-
+@admins.route('/restaurant/<restaurant_id>/<approval_str>', methods=['PUT'])
+def update_restaurantApproval(restaurant_id, approval_str):
+    current_app.logger.info('PUT /restaurant/<restaurant_id> route')
     query = '''
     UPDATE Restaurant_Profile
     SET approval_status = %s
     WHERE restaurant_id = %s
     '''
+    if approval_str == 'approve':
+        approval_status = True
+    elif approval_str == 'reject':
+        approval_status = False
+    else:
+        return 'Invalid approval status. Use "approve" or "reject".'
+    
     data = (approval_status, restaurant_id)
     cursor = db.get_db().cursor()
     r = cursor.execute(query, data)
@@ -120,9 +117,9 @@ def get_adRevenue():
 def get_adsByAdvertisers():
     cursor = db.get_db().cursor()
     the_query = '''
-    SELECT SUM(total_cost) AS 'Ad Revenue by Advertiser', advertiser_id AS 'Advertiser ID'
-    FROM Advertisement
-    GROUP BY advertiser_id
+    SELECT SUM(ad.total_cost) AS 'Ad Revenue by Advertiser', a.advertiser_name AS 'Advertiser Name'
+    FROM Advertisement ad JOIN Advertiser a ON a.advertiser_id = ad.advertiser_id
+    GROUP BY ad.advertiser_id
     '''
     cursor.execute(the_query)
     
@@ -138,8 +135,8 @@ def get_adsByAdvertisers():
 def get_ads():
     cursor = db.get_db().cursor()
     the_query = '''
-    SELECT advertisement_id AS 'Ad ID', advertiser_id AS 'Advertiser ID', total_cost AS 'Ad Cost'
-    FROM Advertisement
+    SELECT ad.advertisement_id AS 'Ad ID', a.advertiser_name AS 'Advertiser Name', ad.total_cost AS 'Ad Cost'
+    FROM Advertisement ad JOIN Advertiser a ON a.advertiser_id = ad.advertiser_id
     '''
     cursor.execute(the_query)
     
@@ -156,7 +153,7 @@ def get_restaurants():
 
     cursor = db.get_db().cursor()
     the_query = '''
-    SELECT *
+    SELECT restaurant_id AS 'Restaurant ID', name AS 'Restaurant Name', address AS 'Address', description AS 'Restaurant Description', hours AS 'Hours of Operation', approval_status
     FROM Restaurant_Profile
     WHERE approval_status = 0
     '''
@@ -168,38 +165,18 @@ def get_restaurants():
     the_response.status_code = 200
     return the_response
 
-
-
-
-
-
 #------------------------------------------------------------
-# Get customer detail for customer with particular userID
-#   Notice the manner of constructing the query. 
-@admins.route('/admins/<userID>', methods=['GET'])
-def get_customer(userID):
-    current_app.logger.info('GET /customers/<userID> route')
+# Update users active status
+@admins.route('/userStatus', methods=['PUT'])
+def update_userStatus():
+    current_app.logger.info('PUT /userStatus route')
+    query = '''
+    UPDATE User
+    SET active_status = last_use_date >= %s
+    ''' 
+    date90DaysAgo = datetime.datetime.now() - datetime.timedelta(days=90)
+    data = (date90DaysAgo.strftime('%Y-%m-%d'))
     cursor = db.get_db().cursor()
-    cursor.execute('SELECT id, first_name, last_name FROM customers WHERE id = {0}'.format(userID))
-    
-    theData = cursor.fetchall()
-    
-    the_response = make_response(jsonify(theData))
-    the_response.status_code = 200
-    return the_response
-
-#------------------------------------------------------------
-# Makes use of the very simple ML model in to predict a value
-# and returns it to the user
-@admins.route('/prediction/<var01>/<var02>', methods=['GET'])
-def predict_value(var01, var02):
-    current_app.logger.info(f'var01 = {var01}')
-    current_app.logger.info(f'var02 = {var02}')
-
-    returnVal = predict(var01, var02)
-    return_dict = {'result': returnVal}
-
-    the_response = make_response(jsonify(return_dict))
-    the_response.status_code = 200
-    the_response.mimetype = 'application/json'
-    return the_response
+    r = cursor.execute(query, data)
+    db.get_db().commit()
+    return 'user status updated!'
