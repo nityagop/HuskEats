@@ -10,16 +10,70 @@ import plotly.express as px
 from modules.nav import SideBarLinks
 import requests 
 # set the header of the page
-st.header('Profile')
+st.header("Restaurant Profile")
+
 
 # You can access the session state to make a more customized/personalized app experience
-st.write(f"### Welcome to your profile, {st.session_state['first_name']}!")
+#st.write(f"### Welcome to your profile, {st.session_state['first_name']}!")
+
+restaurant_id = 2345
+if restaurant_id:
+    url = f"http://api:4000/r/restaurant_owners/profile/{restaurant_id}"
+    response = requests.get(url)
+    profile_list = response.json()
+    profile = profile_list[0]
+
+    # Display profile nicely
+    st.header(f"🍽️ {profile['name']}")
+    st.subheader(f"📍 Address: {profile['address']}")
+    st.write(f"🕒 **Hours:** {profile['hours']}")
+    st.write(f"📄 **Description:** {profile['description']}")
+    st.write(f"✅ **Approval Status:** `{profile['approval_status']}`")
 
 
-st.title("Hours of Operations")
 
-hours_data = requests.get('http://api:4000/r/restaurant_owners/profile').json()
+# Update Profile Button
+st.header("Update Restaurant Profile")
+# Input restaurant details
+restaurant_id = st.text_input("Restaurant ID")
+name = st.text_input("Restaurant Name")
+address = st.text_input("Address")
+image = st.text_input("Main Image URL")
+description = st.text_area("Description")
+promo_image = st.text_input("Promotional Image URL")
+menu_image = st.text_input("Menu Image URL")
+hours = st.text_input("Operating Hours")
+approval_status = st.selectbox("Approval Status", ["pending", "approved", "rejected"])
 
-df = st.dataframe(hours_data)
-st.table(df)
+
+# Profile Data
+profile_data = {
+    "restaurant_id": restaurant_id,
+    "name": name,
+    "address": address,
+    "image": image,
+    "description": description,
+    "promotional_image": promo_image,
+    "menu_image": menu_image,
+    "hours": hours,
+    "approval_status": approval_status
+}
+
+# Create Profile Button
+if st.button("Update Profile"):
+    response = requests.put("http://api:4000/r/restaurant_owners/profile/update", json=profile_data)
+    if response.status_code == 200:
+        st.success("Profile updated successfully!")
+    else:
+        st.error(f"Error: {response.status_code}")
+
+# if st.button("Update Profile"):
+#     url = f"http://api:4000/r//restaurant_owners/profile/update/{restaurant_id}"
+#     response = requests.put(url)
+#     response_list = response.json()
+#     if response.status_code == 200:
+#         st.success("Profile updated!")
+#     else:
+#         st.error(f"Failed to update profile. Status code: {response.status_code}")
+
 

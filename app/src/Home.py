@@ -56,6 +56,11 @@ if st.button(
     # subsequent pages).
     st.session_state["first_name"] = "Jake"
     # finally, we ask streamlit to switch to another page, in this case, the
+    st.session_state['role'] = 'restaurant_owner'
+    # we add the first name of the user (so it can be displayed on 
+    # subsequent pages). 
+    st.session_state['first_name'] = 'Jake'
+    # finally, we ask streamlit to switch to another page, in this case, the 
     # landing page for this particular user type
     logger.info("Logging in as Resteraunt Owner")
     st.switch_page('pages/RestaurantOwnerHome.py')

@@ -22,7 +22,7 @@ if st.button('View my Ratings',
 if st.button('Reply to Reviews', 
              type='primary',
              use_container_width=True):
-  st.switch_page('pages/02_Map_Demo.py')
+  st.switch_page('pages/MyReviews.py')
 
 if st.button('View Profile', 
              type='primary',
