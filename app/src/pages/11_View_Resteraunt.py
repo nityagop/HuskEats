@@ -1,38 +1,32 @@
 import logging
 logger = logging.getLogger(__name__)
-
+import pandas as pd
 import streamlit as st
+from streamlit_extras.app_logo import add_logo
+import world_bank_data as wb
+import matplotlib.pyplot as plt
+import numpy as np
+import plotly.express as px
 from modules.nav import SideBarLinks
 import requests
 
-st.set_page_config(layout = 'wide')
-
-# Display the appropriate sidebar links for the role of the logged in user
+# Call the SideBarLinks from the nav module in the modules directory
 SideBarLinks()
 
-st.title('Prediction with Regression')
+# set the header of the page
+st.header('Restaurants')
 
-# create a 2 column layout
-col1, col2 = st.columns(2)
+st.write(f"###  Here are restaurants by rating: ")
 
-# add one number input for variable 1 into column 1
-with col1:
-  var_01 = st.number_input('Variable 01:',
-                           step=1)
+response = requests.get(f'http://api:4000//top-rest')
 
-# add another number input for variable 2 into column 2
-with col2:
-  var_02 = st.number_input('Variable 02:',
-                           step=1)
 
-logger.info(f'var_01 = {var_01}')
-logger.info(f'var_02 = {var_02}')
+if response.status_code == 200:
+    data = response.json()
+    print("Data:", data)
+else:
+    print("Request failed with status:", response.status_code)
 
-# add a button to use the values entered into the number field to send to the 
-# prediction function via the REST API
-if st.button('Calculate Prediction',
-             type='primary',
-             use_container_width=True):
-  results = requests.get(f'http://api:4000/c/prediction/{var_01}/{var_02}').json()
-  st.dataframe(results)
-  
+
+
+
