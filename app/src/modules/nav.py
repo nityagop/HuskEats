@@ -11,20 +11,20 @@ def HomeNav():
 
 
 #### ------------------------ Examples for Role of pol_strat_advisor ------------------------
-def PolStratAdvHomeNav():
+def RestaurantOwnerHomeNav():
     st.sidebar.page_link(
-        "pages/RestaurantOwnerHome.py", label="Political Strategist Home", icon="👤"
+        "pages/RestaurantOwnerHome.py", label="Restaurant Owner Home", icon="👤"
     )
 
 
-def WorldBankVizNav():
+def MyRatingsNav():
     st.sidebar.page_link(
-        "pages/Ratings.py", label="World Bank Visualization", icon="🏦"
+        "pages/Ratings.py", label="My Ratings Home", icon="🏦"
     )
 
 
-def MapDemoNav():
-    st.sidebar.page_link("pages/02_Map_Demo.py", label="Map Demonstration", icon="🗺️")
+def MyReviewsNav():
+    st.sidebar.page_link("pages/MyReviews.py", label="My Reviews Home", icon="🗺️")
 
 
 ## ------------------------ Examples for Role of usaid_worker ------------------------
@@ -106,10 +106,10 @@ def SideBarLinks(show_home=False):
     if st.session_state["authenticated"]:
 
         # Show World Bank Link and Map Demo Link if the user is a political strategy advisor role.
-        if st.session_state["role"] == "pol_strat_advisor":
-            PolStratAdvHomeNav()
-            WorldBankVizNav()
-            MapDemoNav()
+        if st.session_state["role"] == "restaurant_owner":
+            RestaurantOwnerHomeNav()
+            MyReviewsNav()
+            MyRatingsNav()
 
         # If the user role is advertiser, show advertiser pages
         if st.session_state["role"] == "advertiser":

@@ -13,23 +13,24 @@ import requests
 # Call the SideBarLinks from the nav module in the modules directory
 SideBarLinks()
 
-# set the header of the page
+restaurant_id = 2345
+
 st.header('Overall Ratings')
 
+st.write(f"### Hi, {st.session_state['first_name']}! Here are your ratings:")
 
-# You can access the session state to make a more customized/personalized app experience
-st.write(f"### Hi, {st.session_state['first_name']}! Here are your ratings: ")
+if restaurant_id:
+    url = f"http://api:4000/r/restaurant_owners/{restaurant_id}"
+    response = requests.get(url)
 
-ratings_response = requests.get('http://api:4000/r/restaurant_owners').json()
-
-if ratings_response.status_code == 200:
-    data = ratings_response.json()
-    print("Data:", data)
+    if response.status_code == 200:
+       data = response.json()
+       df = pd.DataFrame(data)
+       st.dataframe(df)
+    else:
+        st.error(f"Request failed with status: {response.status_code}")
 else:
-    print("Request failed with status:", ratings_response.status_code)
-
-
-
+    st.info("Please enter your restaurant ID in the sidebar.")
 
 
 

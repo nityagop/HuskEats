@@ -13,7 +13,7 @@ SideBarLinks()
 st.title('Review Restaurants Requiring Approval')
 st.write('### Restaurants Requiring Approval')
 
-restaurants = requests.get('http://api:4000/a/restaurants').json()
+restaurants = requests.get('http://api:4000/a/restaurant_owners').json()
 
 
 st.write("Please approve or deny them in the table below.")
