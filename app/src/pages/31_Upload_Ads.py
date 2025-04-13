@@ -12,9 +12,9 @@ st.set_page_config(layout="wide")
 SideBarLinks()
 
 
-advertiser_id = st.text_input("Advertiser ID")
 ad_content = st.text_area("Ad Content")
 ad_id = st.text_input("Advertisement ID")
+advertiser_id = 2
 
 
 if st.button("Create Advertisement"):

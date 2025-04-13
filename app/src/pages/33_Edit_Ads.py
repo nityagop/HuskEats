@@ -5,22 +5,23 @@ logger = logging.getLogger(__name__)
 import streamlit as st
 from modules.nav import SideBarLinks
 import requests
+import pandas as pd
 
 st.set_page_config(layout="wide")
 
 SideBarLinks()
-advertiser_id = 1111
+advertiser_id = 2
 st.write("Your current ads")
 
 advertisements = requests.get(
     f"http://api:4000/ad/ad_space/advertisement/{advertiser_id}"
-)
+).json()
+
+if "advertisement_edit_df" not in st.session_state:
+    st.session_state.advertisement_edit_df = pd.DataFrame(advertisements)
 
 
-# st.dataframe(, hide_index=True)
-
-st.write(advertisements.text)
-
+st.dataframe(st.session_state.advertisement_edit_df, hide_index=True)
 
 st.divider()
 
@@ -30,15 +31,11 @@ ad_content = st.text_area("Write new content:")
 
 
 if st.button("Update Advertisement"):
-    data = {
-        "content": ad_content,
-        "advertisement_id": ad_id,
-    }
+    response = requests.put(f"http://api:4000/ad/advertisement/{ad_id}/{ad_content}")
 
-    try:
-        response = requests.put(f"http://api:4000/ad/advertisement/{ad_id}", json=data)
-    except:
-        st.write(f"Failed to update advertisement/{ad_id}")
-
-    if response.status_code == 200:
-        st.write("Advertisement updated!")
+    st.session_state.advertisement_edit_df = pd.DataFrame(
+        requests.get(
+            f"http://api:4000/ad/ad_space/advertisement/{advertiser_id}"
+        ).json()
+    )
+    st.write("Ad updated!")

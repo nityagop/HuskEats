@@ -18,44 +18,42 @@ advertiser = Blueprint("advertiser", __name__, url_prefix="/ad")
 @advertiser.route("/advertisement", methods=["POST"])
 def post_advertisement():
     current_app.logger.info("POST /advertisement route")
-    ad_info = request.json
-    advertiser_id = ad_info["advertiser_id"]
-    content = ad_info["content"]
-    ad_id = ad_info["advertisement_id"]
+    ad_content = request.json
+    advertiser_id = int(ad_content["advertiser_id"])
+    advertisement_id = int(ad_content["advertisement_id"])
+    ad_content = ad_content["content"]
 
-    query = """INSERT INTO Advertisement (advertiser_id, content, active_start_date, active_end_date, type, total_cost, advertisement_id)
-                   VALUES (%s, %s, %s, %s, %s, %s, %s)
+    query = """INSERT INTO Advertisement (advertiser_id, content, advertisement_id)
+                   VALUES (%s, %s, %s)
     """
     data = (
         advertiser_id,
-        content,
-        ad_id,
+        ad_content,
+        advertisement_id,
     )
+
     cursor = db.get_db().cursor()
     cursor.execute(query, data)
+    db.get_db().commit()
 
     response = make_response(jsonify("created ad at {ad_id}"))
     response.status_code = 200
     return response
 
 
-# Update type & content of the existing ad
-@advertiser.route("/advertisement/<ad_id>", methods=["PUT"])
-def update_advertisement(ad_id):
+# Update content of the existing ad
+@advertiser.route("/advertisement/<ad_id>/<content>", methods=["PUT"])
+def update_advertisement(ad_id, content):
     current_app.logger.info("PUT /advertisement/<ad_id> route")
-    ad_update_info = request.json
-    content = ad_update_info["content"]
-    ad_type = ad_update_info["type"]
-    query = """ UPDATE Advertisement
-    SET content={0}, type = {1}
-    WHERE advertisement_id = {2}
-    """.format(
-        content, ad_type, ad_id
-    )
+    query = """ UPDATE Advertisement a
+    SET a.content= %s
+    WHERE a.advertisement_id = %s
+    """
 
+    data = (content, ad_id)
     cursor = db.get_db().cursor()
-    cursor.execute(query)
-
+    cursor.execute(query, data)
+    db.get_db().commit()
     response = make_response(jsonify("updated ad at {ad_id}"))
     response.status_code = 200
     return response
@@ -63,20 +61,20 @@ def update_advertisement(ad_id):
 
 # Return all ads associated with this advertiser
 @advertiser.route("/ad_space/advertisement/<advertiser_id>", methods=["GET"])
-def add_to_adspace(advertiser_id):
+def existing_ads(advertiser_id):
     current_app.logger.info(
         "GET /ad_space/advertisement/{advertiser_id} advertisements route"
     )
 
-    query = """ SELECT content
+    query = """ SELECT advertisement_id, content
     FROM Advertisement
-    WHERE advertiser_id = {0}
-    """.format(
-        advertiser_id
-    )
+    WHERE advertiser_id = %s
+    """
+    data = advertiser_id
 
     cursor = db.get_db().cursor()
-    cursor.execute(query)
+    cursor.execute(query, data)
+    db.get_db().commit()
 
     theData = cursor.fetchall()
 
@@ -93,14 +91,15 @@ def add_to_adspace(ad_id, ad_space_id):
     )
 
     query = """ UPDATE Ad_Space
-    SET purchased_status = True, advertisement_id = {0}
-    WHERE ad_space_id = {1}
-    """.format(
-        ad_id, ad_space_id
-    )
+    SET purchased_status = True, advertisement_id = %s
+    WHERE ad_space_id = %s
+    """
+
+    data = (ad_id, ad_space_id)
 
     cursor = db.get_db().cursor()
-    cursor.execute(query)
+    cursor.execute(query, data)
+    db.get_db().commit()
 
     response = make_response(jsonify("added ad at {ad_id} to ad space {ad_space_id}"))
     response.status_code = 200
@@ -116,13 +115,14 @@ def remove_from_adspace(ad_space_id):
 
     query = """ UPDATE Ad_Space
     SET purchased_status = False, advertisement_id = NULL
-    WHERE ad_space_id = {0}
-    """.format(
-        ad_space_id
-    )
+    WHERE ad_space_id = %s
+    """
+
+    data = (ad_space_id,)
 
     cursor = db.get_db().cursor()
-    cursor.execute(query)
+    cursor.execute(query, data)
+    db.get_db().commit()
 
     response = make_response(jsonify("added ad at {ad_id} to ad space {ad_space_id}"))
     response.status_code = 200
@@ -136,11 +136,11 @@ def available_adspace():
 
     query = """ SELECT *
     FROM Ad_Space
-    WHERE purchased_status = False
     """
 
     cursor = db.get_db().cursor()
     cursor.execute(query)
+    db.get_db().commit()
 
     theData = cursor.fetchall()
 
