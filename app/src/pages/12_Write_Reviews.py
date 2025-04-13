@@ -7,6 +7,7 @@ from modules.nav import SideBarLinks
 import requests
 from datetime import date
 
+#Header
 st.header("Leave a Review!")
 
 # Inputs
@@ -19,10 +20,10 @@ content = st.text_area("Review Content")
 date_reported = st.date_input("Date", value=date.today())
 review_id = st.text_input("Review ID")
 
+#Submission of Reviews
 if st.button("Submit Review"):
   data = {"title": title,"rating": rating,"content": content,"date_reported": str(date_reported),"review_id": review_id}
 
-        # Replace with your API host if different
   endpoint = f"http://localhost:4000/reviews/{user_id}/{restaurant_id}"
   try:
         response = requests.put(f"http://api:4000/reviews/{user_id}/{restaurant_id}", json=data)
