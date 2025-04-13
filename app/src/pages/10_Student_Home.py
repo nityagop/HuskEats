@@ -25,4 +25,4 @@ if st.button('View Resturaunts',
 if st.button('Write Reviews', 
              type='primary',
              use_container_width=True):
-  st.switch_page('pages/')
+  st.switch_page('pages/12_Write_Reviews.py')
