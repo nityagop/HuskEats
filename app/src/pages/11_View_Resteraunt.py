@@ -18,15 +18,14 @@ st.header('Restaurants')
 
 st.write(f"###  Here are restaurants by rating: ")
 
-response = requests.get(f'http://api:4000//top-rest')
+response = requests.get('http://api:4000/s/top-rest').json()
 
 
-if response.status_code == 200:
-    data = response.json()
-    print("Data:", data)
-else:
-    print("Request failed with status:", response.status_code)
+if "df" not in st.session_state:
+    st.session_state.df = pd.DataFrame(response)
 
-
-
-
+event = st.dataframe(
+    st.session_state.df,
+    on_select="rerun",
+    selection_mode="single-row",
+)

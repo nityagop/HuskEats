@@ -18,15 +18,17 @@ st.header('Favorites')
 
 st.write(f"### Hi, {st.session_state['first_name']}! Here are your favorite restaurants: ")
 
-response = requests.get(f'http://api:4000/favorites/{user_id}')
+response = requests.get(f'http://api:4000/s/favorites/{user_id}').json()
 
 
-if response.status_code == 200:
-    data = response.json()
-    print("Data:", data)
-else:
-    print("Request failed with status:", response.status_code)
+if "df" not in st.session_state:
+    st.session_state.df = pd.DataFrame(response)
 
+event = st.dataframe(
+    st.session_state.df,
+    on_select="rerun",
+    selection_mode="single-row",
+)
 
 
 
