@@ -16,7 +16,7 @@ user_id = st.session_state.get('user_id')
 # set the header of the page
 st.header('Favorites')
 
-st.write(f"### Hi, {st.session_state['first_name']}! Here are your favorite restaurants ahsdfjafsdjklfnsd: ")
+st.write(f"### Hi, {st.session_state['first_name']}! Here are your favorite restaurants: ")
 
 response = requests.get(f'http://api:4000/favorites/{user_id}')
 

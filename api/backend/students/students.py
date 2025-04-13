@@ -64,12 +64,33 @@ def get_userFavorites(user_id):
 
     cursor = db.get_db().cursor()
     query = '''
-    select rp.name from Restaurant_Profile rp join User_Favorites uf on rp.restaurant_id = uf.restaurant_id
+    select rp.name, rp.restaurant_id from Restaurant_Profile rp join User_Favorites uf on rp.restaurant_id = uf.restaurant_id
     join User u on uf.user_id = u.user_id
     where u.user_id = %s
     '''
 
     cursor.execute(query, (user_id))
+    theData = cursor.fetchall()
+    
+    the_response = make_response(jsonify(theData))
+    the_response.status_code = 200
+    return the_response
+
+
+#------------------------------------------------------------
+
+# filters restraunt by tags
+@students.route('/restaurant/<tag_id>', methods=['GET'])
+def get_tagrest(tag_id):
+
+    cursor = db.get_db().cursor()
+    query = '''
+    select rp.name, rp.restaurant_id from Restaurant_Profile rp join Restaurant_Tags rt on rp.restaurant_id = rt.restaurant_id
+    join Tag t on rt.tag_id = t.tag_id
+    where t.tag_id = %s;
+    '''
+
+    cursor.execute(query, (tag_id))
     theData = cursor.fetchall()
     
     the_response = make_response(jsonify(theData))

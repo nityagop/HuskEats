@@ -6,10 +6,10 @@ from modules.nav import SideBarLinks
 
 st.set_page_config(layout = 'wide')
 
-SideBarLinks()
+SideBarLinks(show_home=True)
 
 
-st.title(f"Welcome {st.session_state['first_name']} {st.session_state['last_name']}.")
+st.title(f"Welcome {st.session_state['first_name']}.")
 st.write('### What would you like to do today?')
 
 if st.button('View my Favorites', 
