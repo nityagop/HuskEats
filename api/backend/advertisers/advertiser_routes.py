@@ -11,7 +11,7 @@ from backend.db_connection import db
 
 
 # Create new blueprint (collection of routes)
-advertiser = Blueprint("advertiser", __name__)
+advertiser = Blueprint("advertiser", __name__, url_prefix="/ad")
 
 
 # Create a new advertisement
@@ -21,10 +21,6 @@ def post_advertisement():
     ad_info = request.json
     advertiser_id = ad_info["advertiser_id"]
     content = ad_info["content"]
-    active_start_date = ad_info["active_start_date"]
-    active_end_date = ad_info["active_end_date"]
-    ad_type = ad_info["type"]
-    cost = ad_info["total_cost"]
     ad_id = ad_info["advertisement_id"]
 
     query = """INSERT INTO Advertisement (advertiser_id, content, active_start_date, active_end_date, type, total_cost, advertisement_id)
@@ -33,10 +29,6 @@ def post_advertisement():
     data = (
         advertiser_id,
         content,
-        active_start_date,
-        active_end_date,
-        ad_type,
-        cost,
         ad_id,
     )
     cursor = db.get_db().cursor()
@@ -48,7 +40,7 @@ def post_advertisement():
 
 
 # Update type & content of the existing ad
-@advertiser.route("/advertisement/<int: ad_id>", methods=["PUT"])
+@advertiser.route("/advertisement/<ad_id>", methods=["PUT"])
 def update_advertisement(ad_id):
     current_app.logger.info("PUT /advertisement/<ad_id> route")
     ad_update_info = request.json
@@ -70,7 +62,7 @@ def update_advertisement(ad_id):
 
 
 # Return all ads associated with this advertiser
-@advertiser.route("</ad_space/advertisement/{advertiser_id}>", methods=["GET"])
+@advertiser.route("/ad_space/advertisement/<advertiser_id>", methods=["GET"])
 def add_to_adspace(advertiser_id):
     current_app.logger.info(
         "GET /ad_space/advertisement/{advertiser_id} advertisements route"
@@ -88,20 +80,20 @@ def add_to_adspace(advertiser_id):
 
     theData = cursor.fetchall()
 
-    response = make_response(theData)
+    response = make_response(jsonify(theData))
     response.status_code = 200
     return response
 
 
 # Upload ad to adspace
-@advertiser.route("</ad_space/advertisement/{ad_space_id}/{ad_id}>", methods=["PUT"])
+@advertiser.route("/ad_space/advertisement/<ad_space_id>/<ad_id>", methods=["PUT"])
 def add_to_adspace(ad_id, ad_space_id):
     current_app.logger.info(
         "PUT /ad_space/advertisement/{ad_space_id}/{ad_id} addition route"
     )
 
     query = """ UPDATE Ad_Space
-    SET purchased = True, advertisement_id = {0}
+    SET purchased_status = True, advertisement_id = {0}
     WHERE ad_space_id = {1}
     """.format(
         ad_id, ad_space_id
@@ -116,14 +108,14 @@ def add_to_adspace(ad_id, ad_space_id):
 
 
 # Remove ad from adspace
-@advertiser.route("</ad_space/advertisement/{ad_space_id}/{ad_id}>", methods=["PUT"])
+@advertiser.route("/ad_space/advertisement/<ad_space_id>", methods=["PUT"])
 def remove_from_adspace(ad_space_id):
     current_app.logger.info(
         "PUT /ad_space/advertisement/{ad_space_id}/{ad_id} removal route"
     )
 
     query = """ UPDATE Ad_Space
-    SET purchased = False, advertisement_id = Null
+    SET purchased_status = False, advertisement_id = NULL
     WHERE ad_space_id = {0}
     """.format(
         ad_space_id
@@ -133,5 +125,25 @@ def remove_from_adspace(ad_space_id):
     cursor.execute(query)
 
     response = make_response(jsonify("added ad at {ad_id} to ad space {ad_space_id}"))
+    response.status_code = 200
+    return response
+
+
+# Show available ad spaces
+@advertiser.route("/ad_spaces", methods=["GET"])
+def available_adspace():
+    current_app.logger.info("GET /ad_spaces route")
+
+    query = """ SELECT *
+    FROM Ad_Space
+    WHERE purchased_status = False
+    """
+
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+
+    theData = cursor.fetchall()
+
+    response = make_response(jsonify(theData))
     response.status_code = 200
     return response
