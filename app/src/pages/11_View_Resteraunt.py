@@ -20,6 +20,7 @@ st.write(f"###  Here are restaurants by rating: ")
 
 response = requests.get('http://api:4000/s/top-rest').json()
 
+
 if "df" not in st.session_state:
     st.session_state.df = pd.DataFrame(response)
 
@@ -35,19 +36,24 @@ event = st.dataframe(
 )
 
 selected_rows = event.selection["rows"]
+
 if selected_rows:
     selected_index = selected_rows[0]
     selected_restaurant = response[selected_index]
+
+    st.session_state.restaurant_name = selected_restaurant['Restaurant Name']
+    st.session_state.restaurant_id = selected_restaurant.get('Restaurant ID')
+
     st.divider()
     st.write("### Restaurant Details")
     st.write(f"**Name:** {selected_restaurant['Restaurant Name']}")
     st.write(f"**Address:** {selected_restaurant['Address']}")
-    st.write(f"**** {selected_restaurant['Restaurant Description']}")
-    
+    st.write(f"**Description:** {selected_restaurant['Restaurant Description']}")
+
     left, right = st.columns(2)
     if left.button("View Restaurant Profile", use_container_width=True):
         st.write("Going to restaurant profile...")
-        # st.switch_page('pages/22_User_Stats.py')
+
     if right.button("Write Review", type="primary", use_container_width=True):
-        st.switch_page('pages/12_Write_Reviews.py')
+        st.switch_page('pages/reviewforrest.py')
  

@@ -28,10 +28,10 @@ SELECT
     rp.address as 'Address',
     AVG(r.rating) AS 'Rating',
     rp.description as 'Restaurant Description'
-FROM Restaurant_Profile rp
-JOIN Review r ON rp.restaurant_id = r.restaurant_id
-GROUP BY rp.restaurant_id, rp.name, rp.address
-ORDER BY 'Rating' DESC;
+    FROM Restaurant_Profile rp
+    JOIN Review r ON rp.restaurant_id = r.restaurant_id
+    GROUP BY rp.restaurant_id, rp.name, rp.address
+    ORDER BY 'Rating' DESC;
     ''')
     
     theData = cursor.fetchall()
