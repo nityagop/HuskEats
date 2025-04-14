@@ -18,7 +18,7 @@ restaurant_owners = Blueprint('restaurant_owners', __name__, url_prefix="/r")
 
 #------------------------------------------------------------
 
-# get the overall/avg reviews 
+# get the overall/avg ratings of the restaurant  
 @restaurant_owners.route('/restaurant_owners/<restaurant_id>', methods=['GET'])
 def get_avg_reviews(restaurant_id):
     cursor = db.get_db().cursor()
@@ -80,7 +80,7 @@ def add_reply():
     return the_response
 
 
-# create restaurant profile 
+# access the restaurant profile 
 @restaurant_owners.route('/restaurant_owners/profile/<restaurant_id>', methods=['GET'])
 def add_profile(restaurant_id):
 
