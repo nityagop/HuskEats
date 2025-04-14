@@ -23,10 +23,15 @@ students = Blueprint('students', __name__)
 def get_topRestaurants():
     cursor = db.get_db().cursor()
     cursor.execute('''
-    select rp.name as 'resturants' 
-    from Restaurant_Profile rp join Review r on rp.restaurant_id = r.restaurant_id
-    GROUP BY rp.restaurant_id, rp.name
-    order by avg(r.rating) desc;
+SELECT 
+    rp.name as 'Restaurant Name', 
+    rp.address as 'Address',
+    AVG(r.rating) AS 'Rating',
+    rp.description as 'Restaurant Description'
+FROM Restaurant_Profile rp
+JOIN Review r ON rp.restaurant_id = r.restaurant_id
+GROUP BY rp.restaurant_id, rp.name, rp.address
+ORDER BY 'Rating' DESC;
     ''')
     
     theData = cursor.fetchall()
