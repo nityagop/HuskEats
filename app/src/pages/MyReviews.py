@@ -16,7 +16,7 @@ add_logo("assets/logo.png", height=400)
 # view all reviews 
 st.header('My Reviews')
 
-restaurant_id = 2345
+restaurant_id = 1
 
 if restaurant_id:
     url = f"http://api:4000/r/restaurant_owners/reviews/{restaurant_id}"

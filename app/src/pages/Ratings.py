@@ -13,7 +13,7 @@ import requests
 # Call the SideBarLinks from the nav module in the modules directory
 SideBarLinks()
 
-restaurant_id = 2345
+restaurant_id = 1
 
 st.header('Overall Ratings')
 

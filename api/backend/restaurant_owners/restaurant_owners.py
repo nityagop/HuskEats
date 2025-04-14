@@ -18,7 +18,7 @@ restaurant_owners = Blueprint('restaurant_owners', __name__, url_prefix="/r")
 
 #------------------------------------------------------------
 
-# get the overall/avg reviews 
+# get the overall/avg ratings of the restaurant  
 @restaurant_owners.route('/restaurant_owners/<restaurant_id>', methods=['GET'])
 def get_avg_reviews(restaurant_id):
     cursor = db.get_db().cursor()
@@ -35,6 +35,21 @@ def get_avg_reviews(restaurant_id):
     the_response = make_response(jsonify(theData))
     the_response.status_code = 200
     return the_response
+
+# get all individual ratings of the restaurant
+@restaurant_owners.route('/restaurant_owners/all_ratings/<restaurant_id>', methods=['GET'])
+def get_all_ratings(restaurant_id):
+    cursor = db.get_db().cursor()
+
+    cursor.execute('''
+        SELECT r.restaurant_id, rp.name AS restaurant_name, r.rating, r.review_id, r.content
+        FROM Review r
+        JOIN Restaurant_Profile rp ON r.restaurant_id = rp.restaurant_id
+        WHERE rp.restaurant_id = %s
+    ''', (restaurant_id,))
+
+    ratings_data = cursor.fetchall()
+    return make_response(jsonify(ratings_data), 200)
 
 # see the popularity of the restaurant 
 @restaurant_owners.route('/restaurant_owners/reviews/<restaurant_id>', methods=['GET'])
@@ -80,7 +95,7 @@ def add_reply():
     return the_response
 
 
-# create restaurant profile 
+# access the restaurant profile 
 @restaurant_owners.route('/restaurant_owners/profile/<restaurant_id>', methods=['GET'])
 def add_profile(restaurant_id):
 
