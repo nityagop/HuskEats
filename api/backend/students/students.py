@@ -23,15 +23,15 @@ students = Blueprint('students', __name__)
 def get_topRestaurants():
     cursor = db.get_db().cursor()
     cursor.execute('''
-SELECT 
-    rp.name as 'Restaurant Name', 
-    rp.address as 'Address',
-    AVG(r.rating) AS 'Rating',
-    rp.description as 'Restaurant Description'
-    FROM Restaurant_Profile rp
-    JOIN Review r ON rp.restaurant_id = r.restaurant_id
-    GROUP BY rp.restaurant_id, rp.name, rp.address
-    ORDER BY 'Rating' DESC;
+            select 
+            rp.name as 'Restaurant Name', 
+            rp.address as 'Address',
+            avg(r.rating) as 'Rating',
+            rp.description as 'Restaurant Description'
+        FROM Restaurant_Profile rp
+        JOIN Review r ON rp.restaurant_id = r.restaurant_id
+        GROUP BY rp.restaurant_id, rp.name, rp.address, rp.description
+        order by Rating desc;
     ''')
     
     theData = cursor.fetchall()
@@ -43,8 +43,8 @@ SELECT
 #------------------------------------------------------------
 
 # get all reviews for a certain resutrant
-@students.route('/reviews/<resturaunt_id>', methods=['GET'])
-def get_restReviews(resturaunt_id):
+@students.route('/reviews/<restaurant_id>', methods=['GET'])
+def get_restReviews(restaurant_id):
 
     cursor = db.get_db().cursor()
     query = '''
@@ -52,6 +52,8 @@ def get_restReviews(resturaunt_id):
     from Restaurant_Profile rp join Review r on rp.restaurant_id = r.restaurant_id
     join User u on r.user_id = u.user_id
     where rp.restaurant_id = %s
+    GROUP BY rp.restaurant_id, rp.name, rp.address
+    ORDER BY Rating DESC;
     '''
 
     cursor.execute(query, (restaurant_id,))
@@ -69,12 +71,18 @@ def get_userFavorites(user_id):
 
     cursor = db.get_db().cursor()
     query = '''
-    select rp.name, rp.restaurant_id from Restaurant_Profile rp join User_Favorites uf on rp.restaurant_id = uf.restaurant_id
-    join User u on uf.user_id = u.user_id
+    select rp.name as 'Restaurant Name', 
+    rp.address as 'Address',
+    AVG(r.rating) AS 'Rating',
+    rp.description as 'Restaurant Description'
+    from Restaurant_Profile rp join User_Favorites uf on rp.restaurant_id = uf.restaurant_id
+    join User u on uf.user_id = u.user_id JOIN Review r ON rp.restaurant_id = r.restaurant_id
     where u.user_id = %s
+    group by rp.name, rp.address, rp.description
+    order by Rating desc;
     '''
 
-    cursor.execute(query, (user_id))
+    cursor.execute(query, (user_id, ))
     theData = cursor.fetchall()
     
     the_response = make_response(jsonify(theData))

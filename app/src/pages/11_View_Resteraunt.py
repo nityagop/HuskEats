@@ -16,7 +16,7 @@ SideBarLinks()
 # set the header of the page
 st.header('Restaurants')
 
-st.write(f"###  Here are restaurants by rating: ")
+st.write(f"###  Select a restaurant for more information: ")
 
 response = requests.get('http://api:4000/s/top-rest').json()
 
@@ -56,4 +56,3 @@ if selected_rows:
 
     if right.button("Write Review", type="primary", use_container_width=True):
         st.switch_page('pages/reviewforrest.py')
- 
