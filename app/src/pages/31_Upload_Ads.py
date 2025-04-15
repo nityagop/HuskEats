@@ -13,7 +13,6 @@ SideBarLinks()
 
 
 ad_content = st.text_area("Ad Content")
-ad_id = st.text_input("Advertisement ID")
 advertiser_id = 2
 
 
@@ -21,13 +20,6 @@ if st.button("Create Advertisement"):
     data = {
         "advertiser_id": advertiser_id,
         "content": ad_content,
-        "advertisement_id": ad_id,
     }
 
-    try:
-        response = requests.post("http://api:4000/ad/advertisement", json=data)
-    except:
-        st.write(f"Failed to create advertisement")
-
-    if response.status_code == 200:
-        st.write("Advertisement created!")
+    response = requests.post("http://api:4000/ad/advertisement", json=data)

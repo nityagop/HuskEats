@@ -11,7 +11,7 @@ SideBarLinks()
 
 st.title("Advertiser Home Page")
 st.write("### View and manage ads here!")
-st.write("Your advertiser id: 2")
+st.write("Logged in as advertiser id: 2")
 
 st.divider()
 st.write("#### Upload")

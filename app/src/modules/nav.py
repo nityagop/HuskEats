@@ -18,30 +18,11 @@ def RestaurantOwnerHomeNav():
 
 
 def MyRatingsNav():
-    st.sidebar.page_link(
-        "pages/Ratings.py", label="My Ratings Home", icon="🏦"
-    )
+    st.sidebar.page_link("pages/Ratings.py", label="My Ratings Home", icon="🏦")
 
 
 def MyReviewsNav():
     st.sidebar.page_link("pages/MyReviews.py", label="My Reviews Home", icon="🗺️")
-
-
-## ------------------------ Examples for Role of usaid_worker ------------------------
-def ApiTestNav():
-    st.sidebar.page_link("pages/12_API_Test.py", label="Test the API", icon="🛜")
-
-
-def PredictionNav():
-    st.sidebar.page_link(
-        "pages/11_Prediction_Calc.py", label="Regression Prediction", icon="📈"
-    )
-
-
-def ClassificationNav():
-    st.sidebar.page_link(
-        "pages/13_Classification.py", label="Classification Demo", icon="🌺"
-    )
 
 
 #### ------------------------ System Admin Role ------------------------

@@ -11,7 +11,7 @@ st.set_page_config(layout="wide")
 
 SideBarLinks()
 advertiser_id = 2
-st.write("Your current ads")
+st.write("#### Your current ads")
 
 advertisements = requests.get(
     f"http://api:4000/ad/ad_space/advertisement/{advertiser_id}"
@@ -38,4 +38,3 @@ if st.button("Update Advertisement"):
             f"http://api:4000/ad/ad_space/advertisement/{advertiser_id}"
         ).json()
     )
-    st.write("Ad updated!")
