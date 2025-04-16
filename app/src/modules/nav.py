@@ -62,7 +62,7 @@ def UploadAdPageNav():
 
 
 def ManageAdPageNav():
-    st.sidebar.page_link("pages/32_Manage_Ads.py", label="Manage Ads", icon="➕")
+    st.sidebar.page_link("pages/32_Manage_Ads.py", label="Manage Ad Space", icon="➕")
 
 
 def EditAdPageNav():

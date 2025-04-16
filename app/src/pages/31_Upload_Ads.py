@@ -11,8 +11,8 @@ st.set_page_config(layout="wide")
 
 SideBarLinks()
 
-
-ad_content = st.text_area("Ad Content")
+st.write("#### Upload A New Ad")
+ad_content = st.text_area("Write your content:")
 advertiser_id = 2
 
 
