@@ -22,7 +22,7 @@ students = Blueprint('students', __name__)
 def get_topRestaurants():
     cursor = db.get_db().cursor()
     cursor.execute('''
-            select 
+            select rp.restaurant_id AS 'Restaurant ID',
             rp.name as 'Restaurant Name', 
             rp.address as 'Address',
             avg(r.rating) as 'Rating',

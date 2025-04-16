@@ -39,6 +39,10 @@ selected_rows = event.selection["rows"]
 if selected_rows:
     selected_index = selected_rows[0]
     selected_restaurant = restaurants[selected_index]
+
+    st.session_state.restaurant_name = selected_restaurant['Restaurant Name']
+    st.session_state.restaurant_id = selected_restaurant.get('Restaurant ID')
+    
     st.divider()
     st.write("### Restaurant Details")
     st.write(f"**Name:** {selected_restaurant['Restaurant Name']}")
@@ -47,8 +51,11 @@ if selected_rows:
     
     left, middle, right = st.columns(3)
     if left.button("View Restaurant Profile", use_container_width=True):
-        st.write("Going to restaurant profile...")
-        # st.switch_page('pages/22_User_Stats.py')
+        # st.write("Going to restaurant profile...")
+        # st.switch_page('pages/Profile.py')
+        st.switch_page('pages/13_View_ProfileOfRestaurant.py')
+
+
     if middle.button("Approve", type="primary", use_container_width=True):
         restApproval = requests.put(f"http://api:4000/a/restaurant/{selected_restaurant['Restaurant ID']}/approve")
         st.write("Restaurant approved successfully!")
