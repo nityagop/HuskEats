@@ -39,12 +39,12 @@ SideBarLinks(show_home=True)
 logger.info("Loading the Home page of the app")
 st.title("HuskEats Home Page")
 st.write("\n\n")
-st.write("### HI! As which user would you like to log in?")
+st.info("### HI! As which user would you like to log in?")
 
 # For each of the user personas for which we are implementing
 # functionality, we put a button on the screen that the user
 # can click to MIMIC logging in as that mock user.
-
+st.divider()
 if st.button(
     "Act as Jake, a Restaurant Owner", type="primary", use_container_width=True
 ):
@@ -64,7 +64,7 @@ if st.button(
     # landing page for this particular user type
     logger.info("Logging in as Restaurant Owner")
     st.switch_page("pages/40_RestaurantOwnerHome.py")
-
+st.divider()
 if st.button(
     "Act as Bob, a Northeastern Student", type="primary", use_container_width=True
 ):
@@ -73,7 +73,7 @@ if st.button(
     st.session_state["first_name"] = "Bob"
     logger.info("Logging in as Student")
     st.switch_page("pages/10_Student_Home.py")
-
+st.divider()
 if st.button(
     "Act as Lindsay, System Administrator", type="primary", use_container_width=True
 ):
@@ -83,7 +83,7 @@ if st.button(
     logger.info("Logging in as System Administrator")
     st.switch_page("pages/20_Admin_Home.py")
 
-
+st.divider()
 if st.button("Act as Patrick, an Advertiser", type="primary", use_container_width=True):
     st.session_state["authenticated"] = True
     st.session_state["role"] = "advertiser"
