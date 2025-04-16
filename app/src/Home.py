@@ -56,32 +56,32 @@ if st.button(
     # subsequent pages).
     st.session_state["first_name"] = "Jake"
     # finally, we ask streamlit to switch to another page, in this case, the
-    st.session_state['role'] = 'restaurant_owner'
-    # we add the first name of the user (so it can be displayed on 
-    # subsequent pages). 
-    st.session_state['first_name'] = 'Jake'
-    # finally, we ask streamlit to switch to another page, in this case, the 
+    st.session_state["role"] = "restaurant_owner"
+    # we add the first name of the user (so it can be displayed on
+    # subsequent pages).
+    st.session_state["first_name"] = "Jake"
+    # finally, we ask streamlit to switch to another page, in this case, the
     # landing page for this particular user type
-    logger.info("Logging in as Resteraunt Owner")
-    st.switch_page('pages/RestaurantOwnerHome.py')
+    logger.info("Logging in as Restaurant Owner")
+    st.switch_page("pages/40_RestaurantOwnerHome.py")
 
-if st.button('Act as Bob, a Northeastern Student', 
-            type = 'primary', 
-            use_container_width=True):
-    st.session_state['authenticated'] = True
-    st.session_state['role'] = 'user'
-    st.session_state['first_name'] = 'Bob'
+if st.button(
+    "Act as Bob, a Northeastern Student", type="primary", use_container_width=True
+):
+    st.session_state["authenticated"] = True
+    st.session_state["role"] = "student"
+    st.session_state["first_name"] = "Bob"
     logger.info("Logging in as Student")
-    st.switch_page('pages/10_Student_Home.py')
+    st.switch_page("pages/10_Student_Home.py")
 
-if st.button('Act as Lindsay, System Administrator', 
-            type = 'primary', 
-            use_container_width=True):
-    st.session_state['authenticated'] = True
-    st.session_state['role'] = 'administrator'
-    st.session_state['first_name'] = 'Lindsay'
+if st.button(
+    "Act as Lindsay, System Administrator", type="primary", use_container_width=True
+):
+    st.session_state["authenticated"] = True
+    st.session_state["role"] = "administrator"
+    st.session_state["first_name"] = "Lindsay"
     logger.info("Logging in as System Administrator")
-    st.switch_page('pages/20_Admin_Home.py')
+    st.switch_page("pages/20_Admin_Home.py")
 
 
 if st.button("Act as Patrick, an Advertiser", type="primary", use_container_width=True):
