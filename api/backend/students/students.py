@@ -70,14 +70,14 @@ def get_userFavorites(user_id):
 
     cursor = db.get_db().cursor()
     query = '''
-    select rp.name as 'Restaurant Name', 
+    select rp.restaurant_id, rp.name as 'Restaurant Name', 
     rp.address as 'Address',
     AVG(r.rating) AS 'Rating',
     rp.description as 'Restaurant Description'
     from Restaurant_Profile rp join User_Favorites uf on rp.restaurant_id = uf.restaurant_id
     join User u on uf.user_id = u.user_id JOIN Review r ON rp.restaurant_id = r.restaurant_id
     where u.user_id = %s
-    group by rp.name, rp.address, rp.description
+    group by rp.restaurant_id, rp.name, rp.address, rp.description
     order by Rating desc;
     '''
 
@@ -143,3 +143,17 @@ def post_review(user_id, resturaunt_id):
     response = make_response(jsonify("created review at {review_id}"))
     response.status_code = 200
     return response
+#------------------------------------------------------------
+# 
+@students.route('/favorites/<user_id>/<restaurant_id>', methods=['DELETE'])
+def delete_favorite(user_id, restaurant_id):
+    cursor = db.get_db().cursor()
+
+    delete_query = '''
+    delete from User_Favorites 
+    where user_id = %s AND restaurant_id = %s
+    '''
+    cursor.execute(delete_query, (user_id, restaurant_id))
+    db.get_db().commit()
+
+    return make_response(jsonify({"message": "Favorite deleted"}), 200)
