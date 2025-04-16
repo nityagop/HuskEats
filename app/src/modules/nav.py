@@ -18,11 +18,14 @@ def RestaurantOwnerHomeNav():
 
 
 def MyRatingsNav():
-    st.sidebar.page_link("pages/Ratings.py", label="My Ratings Home", icon="🏦")
+    st.sidebar.page_link("pages/Ratings.py", label="My Ratings Home", icon="🥇")
 
 
 def MyReviewsNav():
-    st.sidebar.page_link("pages/MyReviews.py", label="My Reviews Home", icon="🗺️")
+    st.sidebar.page_link("pages/MyReviews.py", label="My Reviews Home", icon="⭐️")
+
+def MyProfileNav():
+    st.sidebar.page_link("pages/Profile.py", label="My Profile Home", icon="👩‍💻")
 
 
 #### ------------------------ System Admin Role ------------------------
@@ -91,6 +94,7 @@ def SideBarLinks(show_home=False):
             RestaurantOwnerHomeNav()
             MyReviewsNav()
             MyRatingsNav()
+            MyProfileNav()
 
         # If the user role is advertiser, show advertiser pages
         if st.session_state["role"] == "advertiser":

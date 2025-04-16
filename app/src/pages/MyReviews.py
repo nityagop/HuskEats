@@ -19,13 +19,12 @@ st.header('My Reviews')
 restaurant_id = 1
 
 if restaurant_id:
-    url = f"http://api:4000/r/restaurant_owners/reviews/{restaurant_id}"
+    url = f"http://api:4000/r/restaurant_owners/all_ratings/{restaurant_id}"
     response = requests.get(url)
 
     if response.status_code == 200:
        data = response.json()
-       df = pd.DataFrame(data)
-       st.dataframe(df)
+       
     else:
         st.error(f"Request failed with status: {response.status_code}")
 else:
@@ -35,10 +34,9 @@ else:
 # add reviews 
 
 for review in data:
-    review_id = review["review_ids"]
-    content = review["all_reviews"]
+    review_id = review["review_id"]
+    content = review["content"]
 
-    st.markdown(f"### Review #{review_id}")
     st.write(f"**Customer Review:** {content}")
 
     reply_text = st.text_area("Your Reply:", key=f"reply_{review_id}")

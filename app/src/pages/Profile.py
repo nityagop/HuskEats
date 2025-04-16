@@ -9,6 +9,9 @@ import numpy as np
 import plotly.express as px
 from modules.nav import SideBarLinks
 import requests 
+
+SideBarLinks()
+
 # set the header of the page
 st.header("Restaurant Profile")
 
@@ -61,7 +64,9 @@ profile_data = {
 
 # Create Profile Button
 if st.button("Update Profile"):
-    response = requests.put("http://api:4000/r/restaurant_owners/profile/update", json=profile_data)
+    url = f"http://api:4000/r/restaurant_owners/profile/update"
+    response = requests.put(url)
+    # response = requests.put("http://api:4000/r/restaurant_owners/profile/update", json=profile_data)
     if response.status_code == 200:
         st.success("Profile updated successfully!")
     else:
