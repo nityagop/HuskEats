@@ -7,7 +7,7 @@ from modules.nav import SideBarLinks
 
 st.set_page_config(layout="wide")
 
-SideBarLinks(show_home=True)
+SideBarLinks()
 
 st.title(f"Welcome {st.session_state['first_name']}.")
 st.write("### What would you like to do today?")
