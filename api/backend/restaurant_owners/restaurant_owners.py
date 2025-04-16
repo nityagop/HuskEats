@@ -9,6 +9,7 @@ from flask import jsonify
 from flask import make_response
 from flask import current_app
 from backend.db_connection import db
+from flask import Response
 
 #------------------------------------------------------------
 # Create a new Blueprint object, which is a collection of 
@@ -96,39 +97,51 @@ def add_reply():
 
 # access the restaurant profile 
 @restaurant_owners.route('/restaurant_owners/profile/<restaurant_id>', methods=['GET'])
-def add_profile(restaurant_id):
-
+def get_profile(restaurant_id):
     cursor = db.get_db().cursor()
-    
-    cursor.execute('''
-        SELECT restaurant_id, name, address, image, description, 
-               promotional_image, menu_image, hours, approval_status 
-        FROM Restaurant_Profile
-        WHERE restaurant_id = %s
-    ''', (restaurant_id,))    
-    theData = cursor.fetchall()
-    
-    the_response = make_response(jsonify(theData))
-    the_response.status_code = 200
-    return the_response
+    cursor.execute(
+        '''SELECT * FROM Restaurant_Profile WHERE restaurant_id = %s''',
+        (restaurant_id,)
+    )
+    data = cursor.fetchall()
+    return jsonify(data)
 
-# update restaurant profile 
+# update profile
 @restaurant_owners.route('/restaurant_owners/profile/update', methods=['PUT'])
 def update_profile():
-    profile_info = request.json 
-    restaurant_id = profile_info['restaurant_id']
-    name = profile_info['name']
-    address = profile_info['address']
-    image = profile_info['image']
-    description = profile_info['description']
-    promotional_image = profile_info['promotional_image']
-    menu_image = profile_info['menu_image']
-    hours = profile_info['hours']
-    approval_status = profile_info['approval_status']
+    profile_info = request.get_json()
 
-    query = 'UPDATE Restaurant_Profile SET name = %s, address = %s, image = %s, description = %s, promotional_image = %s, menu_image = %s, hours = %s, approval_status = %s where restaurant_id = %s'
+    print("Received profile info:", profile_info)
+
+    try:
+        restaurant_id = profile_info['restaurant_id']
+        name = profile_info['name']
+        address = profile_info['address']
+        image = profile_info['image']
+        description = profile_info['description']
+        promotional_image = profile_info['promotional_image']
+        menu_image = profile_info['menu_image']
+        hours = profile_info['hours']
+        approval_status = profile_info['approval_status']
+    except KeyError as e:
+        return make_response(jsonify({'error': f'Missing field: {e}'}), 400)
+
+    query = '''
+        UPDATE Restaurant_Profile
+        SET name = %s, address = %s, image = %s, description = %s,
+            promotional_image = %s, menu_image = %s, hours = %s, approval_status = %s
+        WHERE restaurant_id = %s
+    '''
     data = (name, address, image, description, promotional_image, menu_image, hours, approval_status, restaurant_id)
-    cursor = db.get_db().cursor()
-    r = cursor.execute(query, data)
-    db.get_db().commit()
-    return 'profile updated!'
+
+    conn = db.get_db()
+    cursor = conn.cursor()
+    rows_affected = cursor.execute(query, data)
+    conn.commit()
+
+    if rows_affected == 0:
+        return make_response(jsonify({'message': 'No profile found to update'}), 404)
+
+    return make_response(jsonify({'message': 'Profile updated successfully'}), 200)
+
+

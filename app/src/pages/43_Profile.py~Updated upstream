@@ -65,8 +65,9 @@ if st.button("Update Profile"):
     "hours": hours,
     "approval_status": approval_status
     }
-    url = f"http://api:4000/r/restaurant_owners/profile/update"
-    response = requests.put(url, json=profile_data)
+    url = "http://api:4000/r/restaurant_owners/profile/update"
+    response = requests.put(url, json=profile_data) 
+
     if response.status_code == 200:
         st.success("Profile updated successfully!")
     else:
