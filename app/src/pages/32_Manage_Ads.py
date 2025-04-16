@@ -18,7 +18,7 @@ if "avail_adspace" not in st.session_state:
 
 st.dataframe(st.session_state.avail_adspace, hide_index=True)
 
-st.write("#### Your current ads")
+st.write("#### Your Current Ads")
 
 advertiser_id = 2
 advertisements = requests.get(
@@ -31,6 +31,7 @@ st.dataframe(st.session_state.advertisement_edit_df, hide_index=True)
 
 
 st.divider()
+
 
 choice = st.radio("Modify occupied ad space", ["Upload an ad", "Remove an ad"])
 

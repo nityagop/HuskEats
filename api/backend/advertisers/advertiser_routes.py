@@ -39,6 +39,31 @@ def post_advertisement():
     return response
 
 
+# Delete an advertisement
+@advertiser.route("/advertisement/<advertisement_id>", methods=["DELETE"])
+def delete_advertisement(advertisement_id):
+    current_app.logger.info("DELETE /advertisement route")
+
+    query1 = """UPDATE Ad_Space
+    SET purchased_status = False, advertisement_id = NULL
+    WHERE advertisement_id = %s
+    """
+
+    query2 = """DELETE FROM Advertisement
+                WHERE advertisement_id = %s
+    """
+    data = (advertisement_id,)
+
+    cursor = db.get_db().cursor()
+    cursor.execute(query1, data)
+    cursor.execute(query2, data)
+    db.get_db().commit()
+
+    response = make_response(jsonify("deleted ad"))
+    response.status_code = 200
+    return response
+
+
 # Update content of the existing ad
 @advertiser.route("/advertisement/<ad_id>/<content>", methods=["PUT"])
 def update_advertisement(ad_id, content):
@@ -137,28 +162,6 @@ def available_adspace():
     query = """ SELECT ad_space_id as 'Ad Space ID', cost as 'Cost'
     FROM Ad_Space
     WHERE purchased_status = 0
-    """
-
-    cursor = db.get_db().cursor()
-    cursor.execute(query)
-    db.get_db().commit()
-
-    theData = cursor.fetchall()
-
-    response = make_response(jsonify(theData))
-    response.status_code = 200
-    return response
-
-
-@advertiser.route("/ad_spaces/<advertiser_id>", methods=["GET"])
-def advertiser_occupied_adspace(advertiser_id):
-    current_app.logger.info("GET /ad_spaces/<advertiser_id> route")
-
-    query = """ SELECT ad_space_id as 'Ad Space ID', advertisement_id as 'Advertisement ID'
-    FROM Ad_Space ads
-    JOIN Advertisement ad
-    ON ads.advertisement_id = ad.advertisement_id
-    WHERE purchased_status = 1
     """
 
     cursor = db.get_db().cursor()

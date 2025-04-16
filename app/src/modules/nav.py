@@ -62,7 +62,7 @@ def UploadAdPageNav():
 
 
 def ManageAdPageNav():
-    st.sidebar.page_link("pages/32_Manage_Ads.py", label="Manage Ads", icon="➕")
+    st.sidebar.page_link("pages/32_Manage_Ads.py", label="Manage Ad Space", icon="➕")
 
 
 def EditAdPageNav():
@@ -99,7 +99,7 @@ def SideBarLinks(show_home=False):
     """
 
     # add a logo to the sidebar always
-    st.sidebar.image("assets/logo.png", width=150)
+    st.sidebar.image("assets/logo.png", width=300)
 
     # If there is no logged in user, redirect to the Home (Landing) page
     if "authenticated" not in st.session_state:
