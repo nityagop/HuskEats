@@ -3,6 +3,7 @@
 ### Overview 
 
 Group Members: Nitya Gopalakrishnan, Hailee Fonseca, Gloria Ge, Simar Sidhu, and Aura Herce
+<br> 
 Link to Demo Video: 
 
 ## What is HuskEats?
