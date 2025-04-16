@@ -52,8 +52,7 @@ if selected_rows:
 
     left, right = st.columns(2)
     if left.button("View Restaurant Profile", use_container_width=True):
-        # st.write("Going to restaurant profile...")
-        st.switch_page('pages/13_View_ProfileOfRestaurant.py')
+        st.switch_page('pages/14_View_ProfileOfRestaurant.py')
 
     if right.button("Write Review", type="primary", use_container_width=True):
         st.switch_page('pages/reviewforrest.py')

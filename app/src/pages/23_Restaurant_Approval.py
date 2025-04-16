@@ -42,7 +42,7 @@ if selected_rows:
 
     st.session_state.restaurant_name = selected_restaurant['Restaurant Name']
     st.session_state.restaurant_id = selected_restaurant.get('Restaurant ID')
-    
+
     st.divider()
     st.write("### Restaurant Details")
     st.write(f"**Name:** {selected_restaurant['Restaurant Name']}")
@@ -51,9 +51,7 @@ if selected_rows:
     
     left, middle, right = st.columns(3)
     if left.button("View Restaurant Profile", use_container_width=True):
-        # st.write("Going to restaurant profile...")
-        # st.switch_page('pages/Profile.py')
-        st.switch_page('pages/13_View_ProfileOfRestaurant.py')
+        st.switch_page('pages/14_View_ProfileOfRestaurant.py')
 
 
     if middle.button("Approve", type="primary", use_container_width=True):
