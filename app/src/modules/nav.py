@@ -10,22 +10,23 @@ def HomeNav():
     st.sidebar.page_link("Home.py", label="Home", icon="🏠")
 
 
-#### ------------------------ Examples for Role of pol_strat_advisor ------------------------
+#### ------------------------ Restaurant Role ------------------------
 def RestaurantOwnerHomeNav():
     st.sidebar.page_link(
-        "pages/RestaurantOwnerHome.py", label="Restaurant Owner Home", icon="👤"
+        "pages/40_RestaurantOwnerHome.py", label="Restaurant Owner Home", icon="👤"
     )
 
 
 def MyRatingsNav():
-    st.sidebar.page_link("pages/Ratings.py", label="My Ratings Home", icon="🥇")
+    st.sidebar.page_link("pages/41_Ratings.py", label="My Ratings Home", icon="🥇")
 
 
 def MyReviewsNav():
-    st.sidebar.page_link("pages/MyReviews.py", label="My Reviews Home", icon="⭐️")
+    st.sidebar.page_link("pages/42_MyReviews.py", label="My Reviews Home", icon="⭐️")
+
 
 def MyProfileNav():
-    st.sidebar.page_link("pages/Profile.py", label="My Profile Home", icon="👩‍💻")
+    st.sidebar.page_link("pages/43_Profile.py", label="My Profile Home", icon="👩‍💻")
 
 
 #### ------------------------ System Admin Role ------------------------
@@ -66,6 +67,29 @@ def ManageAdPageNav():
 
 def EditAdPageNav():
     st.sidebar.page_link("pages/33_Edit_Ads.py", label="Edit Ads", icon="✏️")
+
+
+#### -------------------- Student Role ------------------
+
+
+def StudentPageNav():
+    st.sidebar.page_link("pages/10_Student_Home.py", label="Student Home", icon="🧑‍🎓")
+
+
+def ViewPageNav():
+    st.sidebar.page_link(
+        "pages/11_View_Restaurant.py", label="View Restaurant", icon="🔍"
+    )
+
+
+def WritePageNav():
+    st.sidebar.page_link("pages/12_Write_Reviews.py", label="Write Reviews", icon="✏️")
+
+
+def FavoritesPageNav():
+    st.sidebar.page_link(
+        "pages/13_Student_Favorites.py", label="Student Favorites", icon="🌟"
+    )
 
 
 # --------------------------------Links Function -----------------------------------------------
@@ -109,6 +133,13 @@ def SideBarLinks(show_home=False):
             UserStatsNav()
             RestaurantApprovalNav()
             AdRevenueNav()
+
+        # If the user is an student, give them access to the administrator pages
+        if st.session_state["role"] == "student":
+            StudentPageNav()
+            ViewPageNav()
+            WritePageNav()
+            FavoritesPageNav()
 
     if st.session_state["authenticated"]:
         # Always show a logout button if there is a logged in user
