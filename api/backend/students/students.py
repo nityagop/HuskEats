@@ -115,7 +115,7 @@ def get_tagrest(tag_id):
 # Create a new Review
 @students.route('/reviews/<user_id>/<restaurant_id>', methods=["POST"])
 def post_review(user_id, restaurant_id):
-    current_app.logger.info("POST /review route")
+    current_app.logger.info("POST /reviews/<user_id>/<restaurant_id> route")
     reviews_info = request.json
     title = reviews_info["title"]
     rating = reviews_info["rating"]
@@ -133,6 +133,7 @@ def post_review(user_id, restaurant_id):
     )
     cursor = db.get_db().cursor()
     cursor.execute(query, data)
+    db.get_db().commit()
 
     response = make_response(jsonify("created review at {review_id}"))
     response.status_code = 200
