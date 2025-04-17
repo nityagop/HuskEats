@@ -23,3 +23,4 @@ if st.button("Create Advertisement"):
     }
 
     response = requests.post("http://api:4000/ad/advertisement", json=data)
+    st.rerun()

@@ -145,7 +145,7 @@ ADD COLUMN owner_reply TEXT;
 
 INSERT INTO User(user_id, first_name, last_name, email, last_use_date, active_status)
 VALUES
-    (1, 'Kara-lynn', 'Kuhnwald', 'kkuhnwald0@eepurl.com', '2024-04-25', 0),
+    (1, 'Caroline', 'Kuhnwald', 'kkuhnwald0@eepurl.com', '2024-04-25', 0),
     (2, 'Barny', 'Spavins', 'bspavins1@newyorker.com', '2024-09-25', 1),
     (3, 'Madlin', 'Neeve', 'mneeve2@jigsy.com', '2024-08-05', 1),
     (4, 'Giacomo', 'De Biaggi', 'gdebiaggi3@flickr.com', '2025-03-09', 0),
