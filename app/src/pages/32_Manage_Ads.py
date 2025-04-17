@@ -13,10 +13,7 @@ SideBarLinks()
 st.write("#### Unpurchased Ad Spaces")
 avail = requests.get("http://api:4000/ad/ad_spaces").json()
 
-if "avail_adspace" not in st.session_state:
-    st.session_state.avail_adspace = pd.DataFrame(avail)
-
-st.dataframe(st.session_state.avail_adspace, hide_index=True)
+st.dataframe(pd.DataFrame(avail), hide_index=True)
 
 st.write("#### Your Current Ads")
 
@@ -24,10 +21,8 @@ advertiser_id = 2
 advertisements = requests.get(
     f"http://api:4000/ad/ad_space/advertisement/{advertiser_id}"
 ).json()
-if "advertisement_edit_df" not in st.session_state:
-    st.session_state.advertisement_edit_df = pd.DataFrame(advertisements)
 
-st.dataframe(st.session_state.advertisement_edit_df, hide_index=True)
+st.dataframe(pd.DataFrame(advertisements), hide_index=True)
 
 
 st.divider()
@@ -45,12 +40,7 @@ if choice == "Upload an ad":
         response = requests.put(
             f"http://api:4000/ad/ad_space/advertisement/{ad_space_id}/{ad_id}"
         )
-        st.session_state.avail_adspace = requests.get(
-            "http://api:4000/ad/ad_spaces"
-        ).json()
-        st.session_state.advertisement_edit_df = requests.get(
-            f"http://api:4000/ad/ad_space/advertisement/{advertiser_id}"
-        ).json()
+        st.rerun()
 
 if choice == "Remove an ad":
     ad_space_id = int(st.number_input("Ad space to remove from:", value=0, step=1))
@@ -58,10 +48,4 @@ if choice == "Remove an ad":
         response = requests.put(
             f"http://api:4000/ad/ad_space/advertisement/{ad_space_id}"
         )
-        st.session_state.avail_adspace = requests.get(
-            "http://api:4000/ad/ad_spaces"
-        ).json()
-
-        st.session_state.advertisement_edit_df = requests.get(
-            f"http://api:4000/ad/ad_space/advertisement/{advertiser_id}"
-        ).json()
+        st.rerun()

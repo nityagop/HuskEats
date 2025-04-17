@@ -17,11 +17,8 @@ advertisements = requests.get(
     f"http://api:4000/ad/ad_space/advertisement/{advertiser_id}"
 ).json()
 
-if "advertisement_edit_df" not in st.session_state:
-    st.session_state.advertisement_edit_df = pd.DataFrame(advertisements)
 
-
-st.dataframe(st.session_state.advertisement_edit_df, hide_index=True)
+st.dataframe(pd.DataFrame(advertisements), hide_index=True)
 
 st.divider()
 
@@ -38,6 +35,7 @@ if st.button("Update Advertisement"):
             f"http://api:4000/ad/ad_space/advertisement/{advertiser_id}"
         ).json()
     )
+    st.rerun()
 
 
 st.divider()
@@ -50,3 +48,4 @@ if st.button("Delete advertisement"):
             f"http://api:4000/ad/ad_space/advertisement/{advertiser_id}"
         ).json()
     )
+    st.rerun()
