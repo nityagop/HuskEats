@@ -21,8 +21,7 @@ st.write(f"###  Select a restaurant for more information: ")
 response = requests.get('http://api:4000/s/top-rest').json()
 
 
-if "df" not in st.session_state:
-    st.session_state.df = pd.DataFrame(response)
+st.session_state.df = pd.DataFrame(response)
 
 event = st.dataframe(
     st.session_state.df,
@@ -42,7 +41,7 @@ if selected_rows:
     selected_restaurant = response[selected_index]
 
     st.session_state.restaurant_name = selected_restaurant['Restaurant Name']
-    st.session_state.restaurant_id = selected_restaurant.get('Restaurant ID')
+    st.session_state.restaurant_id = selected_restaurant['Restaurant ID']
 
     st.divider()
     st.write("### Restaurant Details")

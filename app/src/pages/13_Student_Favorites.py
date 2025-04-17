@@ -12,7 +12,7 @@ import requests
 
 # Call the SideBarLinks from the nav module in the modules directory
 SideBarLinks()
-user_id = st.session_state.get('user_id')
+# user_id = st.session_state.get('user_id')
 user_id = 1 # for testing purposes
 
 # set the header of the page
@@ -21,11 +21,11 @@ st.header('Favorites')
 st.write(f"### Hi, {st.session_state['first_name']}! Here are your favorite restaurants: ")
 
 response = requests.get(f'http://api:4000/s/favorites/{user_id}').json()
+
 if not response:
     st.info("You have no favorite restaurants yet!")
 else:
-    if "df" not in st.session_state:
-        st.session_state.df = pd.DataFrame(response)
+    st.session_state.df = pd.DataFrame(response)
 
     event = st.dataframe(
         st.session_state.df,
@@ -46,7 +46,7 @@ if selected_rows:
     selected_restaurant = response[selected_index]
 
     st.session_state.restaurant_name = selected_restaurant['Restaurant Name']
-    st.session_state.restaurant_id = selected_restaurant.get('Restaurant ID')
+    st.session_state.restaurant_id = selected_restaurant['Restaurant ID']
 
 
     st.divider()
@@ -59,14 +59,12 @@ if selected_rows:
     if left.button("View Restaurant Profile", use_container_width=True):
         st.switch_page('pages/14_View_ProfileOfRestaurant.py')
 
-    restaurant_id = selected_restaurant.get("restaurant_id")
     if right.button("Remove Favorite", type="primary", use_container_width=True):
         try:
             delete_response = requests.delete(
-                f"http://api:4000/s/favorites/{user_id}/{restaurant_id}")
+                f"http://api:4000/s/favorites/{user_id}/{selected_restaurant['Restaurant ID']}")
             if delete_response.status_code == 200:
                 st.success("Favorite successfully removed!")
-                st.rerun()
             else:
                 st.error("Failed to delete favorite.")
         except Exception as e:

@@ -72,7 +72,7 @@ def get_userFavorites(user_id):
 
     cursor = db.get_db().cursor()
     query = '''
-    select rp.restaurant_id, rp.name as 'Restaurant Name', 
+    select rp.restaurant_id AS 'Restaurant ID', rp.name as 'Restaurant Name', 
     rp.address as 'Address',
     AVG(r.rating) AS 'Rating',
     rp.description as 'Restaurant Description'
@@ -83,7 +83,7 @@ def get_userFavorites(user_id):
     order by Rating desc;
     '''
 
-    cursor.execute(query, (user_id, ))
+    cursor.execute(query, user_id)
     theData = cursor.fetchall()
     
     the_response = make_response(jsonify(theData))

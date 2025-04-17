@@ -18,8 +18,7 @@ restaurants = requests.get('http://api:4000/a/restaurants').json()
 
 st.write("Please approve or deny them in the table below.")
 
-if "df" not in st.session_state:
-    st.session_state.df = pd.DataFrame(restaurants)
+st.session_state.df = pd.DataFrame(restaurants)
 
 event = st.dataframe(
     st.session_state.df,
