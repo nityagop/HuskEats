@@ -25,10 +25,6 @@ if st.button("Submit Review"):
       data = {"title": title,"rating": rating,"content": content}
       restaurant_id = int(restaurant_id)
       rating = int(rating)
-      st.write(f"Submitting review for restaurant {restaurant_id} with rating {rating}")
-      st.write(f"Review Title: {title}")
-      st.write(f"Review Content: {content}")
-      st.write(f"User ID: {user_id}")
 
       try:
             userLastUseDateUpdate = requests.put(f"http://api:4000/s/userLastUseDate/{user_id}")
