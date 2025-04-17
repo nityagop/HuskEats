@@ -51,29 +51,6 @@ def get_all_ratings(restaurant_id):
     ratings_data = cursor.fetchall()
     return make_response(jsonify(ratings_data), 200)
 
-# see the popularity of the restaurant 
-@restaurant_owners.route('/restaurant_owners/reviews/<restaurant_id>', methods=['GET'])
-def get_review(restaurant_id):
-    cursor = db.get_db().cursor()
-    
-    cursor.execute('''
-    SELECT 
-        r.restaurant_id, 
-        rp.name AS restaurant_name, 
-        GROUP_CONCAT(r.review_id SEPARATOR '; ') AS review_ids,
-        GROUP_CONCAT(r.content SEPARATOR '; ') AS all_reviews,
-        COUNT(r.review_id) AS total_reviews
-    FROM Review r 
-    JOIN Restaurant_Profile rp ON r.restaurant_id = rp.restaurant_id 
-    WHERE rp.restaurant_id = %s 
-    GROUP BY r.restaurant_id, rp.name
-    ''', (restaurant_id,))    
-    
-    theData = cursor.fetchall()
-    
-    the_response = make_response(jsonify(theData))
-    the_response.status_code = 200
-    return the_response
 
 # generate a reply to a review 
 @restaurant_owners.route('/restaurant_owners/reply', methods=['POST'])
@@ -134,10 +111,9 @@ def update_profile():
     '''
     data = (name, address, image, description, promotional_image, menu_image, hours, approval_status, restaurant_id)
 
-    conn = db.get_db()
-    cursor = conn.cursor()
+    cursor = db.get_db().cursor()
     rows_affected = cursor.execute(query, data)
-    conn.commit()
+    db.get_db().commit()
 
     if rows_affected == 0:
         return make_response(jsonify({'message': 'No profile found to update'}), 404)

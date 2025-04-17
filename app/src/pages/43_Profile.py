@@ -38,7 +38,6 @@ if restaurant_id:
 # Update Profile Button
 st.header("Update Restaurant Profile")
 # Input restaurant details
-restaurant_id = st.text_input("Restaurant ID")
 name = st.text_input("Restaurant Name")
 address = st.text_input("Address")
 image = st.text_input("Main Image URL")
@@ -46,16 +45,14 @@ description = st.text_area("Description")
 promo_image = st.text_input("Promotional Image URL")
 menu_image = st.text_input("Menu Image URL")
 hours = st.text_input("Operating Hours")
-approval_status = st.text_input("Approval Status")
 
 
-# Profile Data
 
 
-# Create Profile Button
+# Update Profile Button
 if st.button("Update Profile"):
     profile_data = {
-    "restaurant_id": restaurant_id,
+    "restaurant_id": 1,
     "name": name,
     "address": address,
     "image": image,
@@ -63,7 +60,7 @@ if st.button("Update Profile"):
     "promotional_image": promo_image,
     "menu_image": menu_image,
     "hours": hours,
-    "approval_status": approval_status
+    "approval_status": 0
     }
     url = f"http://api:4000/r/restaurant_owners/profile/update"
     response = requests.put(url, json=profile_data)
@@ -71,14 +68,5 @@ if st.button("Update Profile"):
         st.success("Profile updated successfully!")
     else:
         st.error(f"Error: {response.status_code}")
-
-# if st.button("Update Profile"):
-#     url = f"http://api:4000/r//restaurant_owners/profile/update/{restaurant_id}"
-#     response = requests.put(url)
-#     response_list = response.json()
-#     if response.status_code == 200:
-#         st.success("Profile updated!")
-#     else:
-#         st.error(f"Failed to update profile. Status code: {response.status_code}")
-
+    st.rerun()
 
