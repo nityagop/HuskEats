@@ -2,6 +2,8 @@
 
 ### Overview 
 
+DEMO LINK: https://www.youtube.com/watch?v=i131slnkDcg
+
 Group Members: Nitya Gopalakrishnan, Hailee Fonseca, Gloria Ge, Simar Sidhu, and Aura Herce
 <br> 
 Link to Demo Video: 
