@@ -3,6 +3,7 @@
 # Remove this file if you are not using it in your project
 ########################################################
 
+import datetime
 from flask import Blueprint
 from flask import request
 from flask import jsonify
@@ -29,6 +30,7 @@ def get_topRestaurants():
             rp.description as 'Restaurant Description'
         FROM Restaurant_Profile rp
         JOIN Review r ON rp.restaurant_id = r.restaurant_id
+        WHERE rp.approval_status = 1
         GROUP BY rp.restaurant_id, rp.name, rp.address, rp.description
         order by Rating desc;
     ''')
@@ -111,31 +113,23 @@ def get_tagrest(tag_id):
 
 #------------------------------------------------------------
 # Create a new Review
-@students.route('/reviews/<user_id>/<resturaunt_id>', methods=["POST"])
-def post_review(user_id, resturaunt_id):
+@students.route('/reviews/<user_id>/<restaurant_id>', methods=["POST"])
+def post_review(user_id, restaurant_id):
     current_app.logger.info("POST /review route")
     reviews_info = request.json
-    user_id = reviews_info["user_id"]
-    resteraunt_id = reviews_info["resteraunt_id"]
     title = reviews_info["title"]
     rating = reviews_info["rating"]
     content = reviews_info["content"]
-    image = reviews_info["image"]
-    date_reported = reviews_info["date_reported"]
-    review_id = reviews_info["review_id"]
 
-    query = """INSERT INTO Review (user_id, resteraunt_id, title, rating, content, image, date_reported,review_id)
-                   VALUES (%s, %s, %s, %s, %s, %s, %s,%s)
+    query = """INSERT INTO Review (user_id, restaurant_id, title, rating, content)
+                   VALUES (%s, %s, %s, %s, %s)
     """
     data = (
         user_id,
-        resteraunt_id,
+        restaurant_id,
         title,
         rating,
-        content,
-        image,
-        date_reported,
-        review_id
+        content
     )
     cursor = db.get_db().cursor()
     cursor.execute(query, data)
@@ -144,7 +138,23 @@ def post_review(user_id, resturaunt_id):
     response.status_code = 200
     return response
 #------------------------------------------------------------
-# 
+# Update users last use date
+@students.route('/userLastUseDate/<user_id>', methods=['PUT'])
+def update_userStatus(user_id):
+    current_app.logger.info('PUT /userLastUseDate route')
+    query = '''
+    UPDATE User
+    SET last_use_date = %s
+    WHERE user_id = %s
+    ''' 
+    currentDate = datetime.date.today()
+    data = (currentDate, user_id)
+    cursor = db.get_db().cursor()
+    r = cursor.execute(query, data)
+    db.get_db().commit()
+    return 'user last use date updated!'
+#------------------------------------------------------------
+# Deletes a users favorite restaurant
 @students.route('/favorites/<user_id>/<restaurant_id>', methods=['DELETE'])
 def delete_favorite(user_id, restaurant_id):
     cursor = db.get_db().cursor()
