@@ -119,6 +119,7 @@ def get_adsByAdvertisers():
     SELECT SUM(ad.total_cost) AS 'Ad Revenue by Advertiser', a.advertiser_name AS 'Advertiser Name'
     FROM Advertisement ad JOIN Advertiser a ON a.advertiser_id = ad.advertiser_id
     GROUP BY ad.advertiser_id
+    ORDER BY SUM(ad.total_cost) DESC
     '''
     cursor.execute(the_query)
     
@@ -136,6 +137,7 @@ def get_ads():
     the_query = '''
     SELECT ad.advertisement_id AS 'Ad ID', a.advertiser_name AS 'Advertiser Name', ad.total_cost AS 'Ad Cost'
     FROM Advertisement ad JOIN Advertiser a ON a.advertiser_id = ad.advertiser_id
+    ORDER BY ad.total_cost DESC
     '''
     cursor.execute(the_query)
     

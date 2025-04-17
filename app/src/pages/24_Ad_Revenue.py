@@ -31,12 +31,16 @@ try:
     adsByAdvertiser = pd.DataFrame(advertisementsByAdvertiser)
 
     st.write('##### Chart of Ad Revenue by Advertiser')
+    
+    # Add a row with 0 revenue so that bar chart look pretty 
+    zeroRow = pd.DataFrame([{"Advertiser Name": " ", "Ad Revenue by Advertiser": 0}])
+    adsByAdvertiserWithZero = pd.concat([adsByAdvertiser, zeroRow], ignore_index=True)
+
     st.bar_chart(
-    adsByAdvertiser,
+    adsByAdvertiserWithZero,
     x="Advertiser Name",
     color=["#C8A2C8"],
     y="Ad Revenue by Advertiser",
-    use_container_width=True,
     height=500,
     )
 except:
@@ -50,12 +54,12 @@ try:
     allAds = pd.DataFrame(advertisements)
 
     st.write('##### Chart of Ad Revenue by Ad')
+
     st.bar_chart(
     allAds,
     x="Ad ID",
     y="Ad Cost",
-    color=["#E6E6FA"],
-    use_container_width=True,
+    color=["#C8A2C8"],
     height=400,
     )
 except:
