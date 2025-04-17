@@ -17,30 +17,46 @@ add_logo("assets/logo.png", height=400)
 st.header('My Reviews')
 
 restaurant_id = 1
+data = [] 
 
 if restaurant_id:
     url = f"http://api:4000/r/restaurant_owners/all_ratings/{restaurant_id}"
-    response = requests.get(url)
+    response = requests.get(url)  
 
     if response.status_code == 200:
-       data = response.json()
-       
+        data = response.json()
     else:
         st.error(f"Request failed with status: {response.status_code}")
 else:
     st.info("Please enter your restaurant ID in the sidebar.")
 
+if data:
+    for review in data:
+        review_id = review["review_id"]
+        content = review["content"]
+        existing_reply = review.get("owner_reply", "")
 
-# add reviews 
+        st.write(f"**Customer Review:** {content}")
 
-for review in data:
-    review_id = review["review_id"]
-    content = review["content"]
+        reply_text = st.text_area("Your Reply:", value=existing_reply, key=f"reply_{review_id}")
 
-    st.write(f"**Customer Review:** {content}")
+        if st.button("Submit Reply", key=f"submit_{review_id}"):
+            reply_payload = {
+                "review_ids": review_id,
+                "owner_reply": reply_text
+            }
 
-    reply_text = st.text_area("Your Reply:", key=f"reply_{review_id}")
+            reply_response = requests.post("http://api:4000/r/restaurant_owners/reply", json=reply_payload)
 
-    if st.button("Submit Reply", key=f"submit_{review_id}"):
-        st.success("Reply submitted!")
-        print(f"Reply to review {review_id}: {reply_text}")  # or send to a log/email/etc
+            if reply_response.status_code == 200:
+                st.success("Reply submitted!")
+
+                review["owner_reply"] = reply_text
+
+                st.text(f"Reply: {reply_text}")
+
+            else:
+                st.error(f"Failed to submit reply. Status code: {reply_response.status_code}")
+
+        elif existing_reply:
+            st.text(f"Reply: {existing_reply}")

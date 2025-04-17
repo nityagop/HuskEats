@@ -140,6 +140,9 @@ CREATE TABLE Reported_Reviews (
                             ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+ALTER TABLE Review
+ADD COLUMN owner_reply TEXT;
+
 INSERT INTO User(user_id, first_name, last_name, email, last_use_date, active_status)
 VALUES
     (1, 'Kara-lynn', 'Kuhnwald', 'kkuhnwald0@eepurl.com', '2024-04-25', 0),
