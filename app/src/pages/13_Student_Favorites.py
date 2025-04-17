@@ -13,7 +13,7 @@ import requests
 # Call the SideBarLinks from the nav module in the modules directory
 SideBarLinks()
 user_id = st.session_state.get('user_id')
-user_id = 1 # for testing purposes
+user_id = 5 # for testing purposes
 
 # set the header of the page
 st.header('Favorites')
@@ -59,7 +59,7 @@ if selected_rows:
     if left.button("View Restaurant Profile", use_container_width=True):
         st.switch_page('pages/14_View_ProfileOfRestaurant.py')
 
-    restaurant_id = selected_restaurant.get("restaurant_id")
+    restaurant_id = selected_restaurant.get("Restaurant ID")
     if right.button("Remove Favorite", type="primary", use_container_width=True):
         try:
             delete_response = requests.delete(
